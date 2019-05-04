@@ -28,10 +28,19 @@ func (p *Parser) Parse() *ast.Program {
 }
 
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	var exp ast.Expression
+	switch p.curToken.Type {
+	case token.INT:
+		exp = p.parseInteger()
+	}
 	for p.curToken.Type != token.SEMICOLON {
 		p.nextToken()
 	}
-	return &ast.ExpressionStatement{}
+	return &ast.ExpressionStatement{Expression: exp}
+}
+
+func (p *Parser) parseInteger() *ast.Integer {
+	return &ast.Integer{Token: p.curToken}
 }
 
 func (p *Parser) nextToken() {
