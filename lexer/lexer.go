@@ -18,15 +18,14 @@ func New(input string) *Lexer {
 }
 
 func (l *Lexer) NextToken() (tok token.Token) {
-	if l.position >= len(l.input) {
-		return token.Token{Type: token.EOF, Literal: ""}
-	}
 	if isDigit(l.ch) {
 		return l.readDigit()
 	}
-	switch l.input[l.position] {
+	switch l.ch {
 	case ';':
 		tok = token.Token{Type: token.SEMICOLON, Literal: ";"}
+	case 0:
+		return token.Token{Type: token.EOF, Literal: ""}
 	default:
 		return token.Token{}
 	}
