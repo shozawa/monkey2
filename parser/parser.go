@@ -15,6 +15,17 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 
+const (
+	_ = iota
+	SUM
+	PRODUCT
+)
+
+var precedences = map[token.TokenType]int{
+	token.PLUS:     SUM,
+	token.ASTERISK: PRODUCT,
+}
+
 type Parser struct {
 	l         *lexer.Lexer
 	curToken  token.Token
@@ -57,10 +68,6 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 	return left
 }
 
-func (p *Parser) peekPrecedence() int {
-	return 1
-}
-
 func (p *Parser) parseInteger() *ast.Integer {
 	return &ast.Integer{Token: p.curToken}
 }
@@ -70,10 +77,18 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 		Operator: p.curToken.Literal,
 		Left:     left,
 	}
+	precedence := p.curPrecedence()
 	p.nextToken() // consume operator
-	// FIXME: 演算子の優先順位を考慮していない
-	infix.Right = p.parseExpression(0)
+	infix.Right = p.parseExpression(precedence)
 	return infix
+}
+
+func (p *Parser) curPrecedence() int {
+	return precedences[p.curToken.Type]
+}
+
+func (p *Parser) peekPrecedence() int {
+	return precedences[p.peekToken.Type]
 }
 
 func (p *Parser) nextToken() {

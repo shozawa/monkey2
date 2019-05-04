@@ -34,6 +34,9 @@ func TestParseInfixExpression(t *testing.T) {
 		want  string
 	}{
 		{"1 + 2;", "(1 + 2)"},
+		{"1 + 2 + 3;", "((1 + 2) + 3)"},
+		{"1 + 2 * 3;", "(1 + (2 * 3))"},
+		{"1 + 2 * 3 + 4 * 5;", "((1 + (2 * 3)) + (4 * 5))"},
 	}
 	for _, test := range tests {
 		l := lexer.New(test.input)
