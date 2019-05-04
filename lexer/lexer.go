@@ -18,10 +18,13 @@ func New(input string) *Lexer {
 }
 
 func (l *Lexer) NextToken() (tok token.Token) {
+	l.skipWhitespace()
 	if isDigit(l.ch) {
 		return l.readDigit()
 	}
 	switch l.ch {
+	case '+':
+		tok = token.Token{Type: token.PLUS, Literal: "+"}
 	case ';':
 		tok = token.Token{Type: token.SEMICOLON, Literal: ";"}
 	case 0:
@@ -51,6 +54,12 @@ func (l *Lexer) readDigit() token.Token {
 	}
 	tok.Literal = string(result)
 	return tok
+}
+
+func (l *Lexer) skipWhitespace() {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
 }
 
 func isDigit(b byte) bool {
