@@ -5,6 +5,7 @@ type TokenType string
 const (
 	INT       = "INT"
 	PLUS      = "+"
+	ASTERISK  = "*"
 	SEMICOLON = ";"
 	EOF       = "EOF"
 )

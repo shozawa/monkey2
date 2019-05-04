@@ -25,6 +25,8 @@ func (l *Lexer) NextToken() (tok token.Token) {
 	switch l.ch {
 	case '+':
 		tok = token.Token{Type: token.PLUS, Literal: "+"}
+	case '*':
+		tok = token.Token{Type: token.ASTERISK, Literal: "*"}
 	case ';':
 		tok = token.Token{Type: token.SEMICOLON, Literal: ";"}
 	case 0:
