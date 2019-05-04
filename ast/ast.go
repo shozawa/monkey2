@@ -31,7 +31,8 @@ type Integer struct {
 	Token token.Token
 }
 
-func (i *Integer) ExpressionNode() {}
+func (i *Integer) ExpressionNode()      {}
+func (i *Integer) TokenLiteral() string { return i.Token.Literal }
 
 type InfixExpression struct {
 	Token    token.Token
