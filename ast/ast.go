@@ -1,6 +1,8 @@
 package ast
 
 import (
+	"fmt"
+
 	"github.com/shozawa/monkey2/token"
 )
 
@@ -15,6 +17,7 @@ type Statement interface {
 type Expression interface {
 	Node
 	ExpressionNode()
+	String() string
 }
 
 type Program struct {
@@ -33,6 +36,7 @@ type Integer struct {
 
 func (i *Integer) ExpressionNode()      {}
 func (i *Integer) TokenLiteral() string { return i.Token.Literal }
+func (i *Integer) String() string       { return i.TokenLiteral() }
 
 type InfixExpression struct {
 	Token    token.Token
@@ -42,3 +46,6 @@ type InfixExpression struct {
 }
 
 func (i *InfixExpression) ExpressionNode() {}
+func (i *InfixExpression) String() string {
+	return fmt.Sprintf("(%s %s %s)", i.Left.String(), i.Operator, i.Right.String())
+}
