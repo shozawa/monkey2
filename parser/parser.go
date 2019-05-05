@@ -44,6 +44,7 @@ func (p *Parser) Parse() *ast.Program {
 
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	exp := p.parseExpression(0)
+	// FIXME: ';' を省略したときにパースがうまくいかない
 	for p.curToken.Type != token.SEMICOLON {
 		p.nextToken()
 	}
