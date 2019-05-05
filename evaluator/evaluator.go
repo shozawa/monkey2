@@ -18,6 +18,8 @@ func Eval(node ast.Node) object.Object {
 		return result
 	case *ast.ExpressionStatement:
 		return Eval(node.Expression)
+	case *ast.InfixExpression:
+		return evalInfixExpression(node)
 	case ast.Expression:
 		return evalExpression(node)
 	default:
@@ -42,5 +44,23 @@ func evalExpression(exp ast.Expression) object.Object {
 	default:
 		msg := fmt.Sprintf("unexpected expression %T", exp)
 		panic(msg)
+	}
+}
+
+func evalInfixExpression(exp *ast.InfixExpression) object.Object {
+	left, ok := Eval(exp.Left).(*object.Integer)
+	right, ok := Eval(exp.Right).(*object.Integer)
+	if !ok {
+		// TODO: 整数同士の加算以外はエラーを起こす
+		return nil
+	}
+	switch exp.Operator {
+	case "+":
+		return &object.Integer{Value: left.Value + right.Value}
+	case "*":
+		return &object.Integer{Value: left.Value * right.Value}
+	default:
+		// TODO: "未対応の演算子" エラーを起こす
+		return nil
 	}
 }

@@ -13,6 +13,21 @@ func TestEval(t *testing.T) {
 	testIntegerLiteral(t, evaluated, 5)
 }
 
+func TestEvalInfix(t *testing.T) {
+	tests := []struct {
+		input string
+		want  int64
+	}{
+		{"1 + 2;", 3},
+		{"2 * 3;", 6},
+		{"2 + 3 * 5;", 17},
+	}
+	for _, test := range tests {
+		evaluated := testEval(test.input)
+		testIntegerLiteral(t, evaluated, test.want)
+	}
+}
+
 func testEval(input string) object.Object {
 	l := lexer.New(input)
 	p := parser.New(l)
