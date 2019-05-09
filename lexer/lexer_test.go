@@ -21,6 +21,18 @@ func TestLexer(t *testing.T) {
 			token.Token{Type: token.SEMICOLON, Literal: ";"},
 			token.Token{Type: token.EOF, Literal: ""},
 		}},
+		{"foo;", []token.Token{
+			token.Token{Type: token.IDNT, Literal: "foo"},
+			token.Token{Type: token.SEMICOLON, Literal: ";"},
+			token.Token{Type: token.EOF, Literal: ""},
+		}},
+		{"foo + bar;", []token.Token{
+			token.Token{Type: token.IDNT, Literal: "foo"},
+			token.Token{Type: token.PLUS, Literal: "+"},
+			token.Token{Type: token.IDNT, Literal: "bar"},
+			token.Token{Type: token.SEMICOLON, Literal: ";"},
+			token.Token{Type: token.EOF, Literal: ""},
+		}},
 		{"10 + 25 * 3;", []token.Token{
 			token.Token{Type: token.INT, Literal: "10"},
 			token.Token{Type: token.PLUS, Literal: "+"},

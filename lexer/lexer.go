@@ -19,9 +19,13 @@ func New(input string) *Lexer {
 
 func (l *Lexer) NextToken() (tok token.Token) {
 	l.skipWhitespace()
-	if isDigit(l.ch) {
+	switch {
+	case isDigit(l.ch):
 		return l.readDigit()
+	case isIdentifier(l.ch):
+		return l.readIdentifier()
 	}
+
 	switch l.ch {
 	case '+':
 		tok = token.Token{Type: token.PLUS, Literal: "+"}
@@ -58,6 +62,17 @@ func (l *Lexer) readDigit() token.Token {
 	return tok
 }
 
+func (l *Lexer) readIdentifier() token.Token {
+	var result []byte
+	tok := token.Token{Type: token.IDNT}
+	for isIdentifier(l.ch) {
+		result = append(result, l.ch)
+		l.readChar()
+	}
+	tok.Literal = string(result)
+	return tok
+}
+
 func (l *Lexer) skipWhitespace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
@@ -66,4 +81,8 @@ func (l *Lexer) skipWhitespace() {
 
 func isDigit(b byte) bool {
 	return b >= '0' && b <= '9'
+}
+
+func isIdentifier(b byte) bool {
+	return (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z') || b == '_'
 }

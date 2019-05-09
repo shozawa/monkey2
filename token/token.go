@@ -3,6 +3,7 @@ package token
 type TokenType string
 
 const (
+	IDNT      = "IDNT"
 	INT       = "INT"
 	PLUS      = "+"
 	ASTERISK  = "*"
